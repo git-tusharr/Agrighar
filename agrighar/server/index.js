@@ -106,6 +106,7 @@ app.use("/api/products", require("./routes/products"));
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/reviews", require("./routes/reviews"));
 app.use("/api/farmers", require("./routes/farmers"));
+app.use("/api/upload", require("./routes/upload"));
 
 /* ─────────────────────────────────────────────
    Health Check

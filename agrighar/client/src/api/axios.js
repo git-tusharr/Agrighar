@@ -27,6 +27,22 @@ export const updateProduct     = (id, data)  => API.put(`/products/${id}`, data)
 export const deleteProduct     = (id)        => API.delete(`/products/${id}`);
 export const getFarmerProducts = ()          => API.get("/products/my-listings");
 
+// Upload a product image file to Cloudinary (via backend) — returns { url, publicId }
+export const uploadProductImage = (file, onProgress) => {
+  const formData = new FormData();
+  formData.append("image", file);
+  return API.post("/upload/image", formData, {
+    // Let the browser set the correct multipart boundary itself —
+    // overriding the instance's default "application/json" header.
+    headers: { "Content-Type": undefined },
+    onUploadProgress: (evt) => {
+      if (onProgress && evt.total) {
+        onProgress(Math.round((evt.loaded * 100) / evt.total));
+      }
+    },
+  });
+};
+
 // ── ORDERS ───────────────────────────────────────────────────
 export const placeOrder        = (data)      => API.post("/orders", data);
 export const getMyOrders       = ()          => API.get("/orders/my-orders");

@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
-import { createProduct, updateProduct, getProductById } from "../api/axios";
-import { FaLeaf, FaArrowLeft, FaSave } from "react-icons/fa";
+import { createProduct, updateProduct, getProductById, uploadProductImage } from "../api/axios";
+import { FaLeaf, FaArrowLeft, FaSave, FaCamera, FaTimes, FaSpinner } from "react-icons/fa";
 import toast from "react-hot-toast";
 
 const CATEGORIES = ["vegetables", "fruits", "grains", "dairy", "spices", "other"];
 const UNITS      = ["kg", "piece", "dozen", "liter", "bundle", "quintal"];
+
+const MAX_IMAGE_MB = 5;
 
 const AddEditProduct = () => {
   const { t } = useTranslation();
@@ -15,19 +17,23 @@ const AddEditProduct = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // if id exists → edit mode
   const isEdit = Boolean(id);
+  const fileInputRef = useRef(null);
 
   const [form, setForm] = useState({
     name: "", category: "vegetables", price: "", unit: "kg",
     quantity: "", description: "", isOrganic: false, isAvailable: true,
+    image: "",
   });
-  const [loading, setLoading]     = useState(false);
-  const [fetching, setFetching]   = useState(isEdit);
+  const [loading, setLoading]         = useState(false);
+  const [fetching, setFetching]       = useState(isEdit);
+  const [uploading, setUploading]     = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     if (!user || user.role !== "farmer") { navigate("/"); return; }
     if (isEdit) {
       getProductById(id)
-        .then((res) => setForm(res.data))
+        .then((res) => setForm((prev) => ({ ...prev, ...res.data })))
         .catch(() => toast.error("Failed to load product"))
         .finally(() => setFetching(false));
     }
@@ -38,10 +44,46 @@ const AddEditProduct = () => {
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
   };
 
+  // ── Image upload (Cloudinary via backend) ─────────────────────
+  const handleImageSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select a valid image file");
+      return;
+    }
+    if (file.size > MAX_IMAGE_MB * 1024 * 1024) {
+      toast.error(`Image must be smaller than ${MAX_IMAGE_MB}MB`);
+      return;
+    }
+
+    setUploading(true);
+    setUploadProgress(0);
+    try {
+      const res = await uploadProductImage(file, setUploadProgress);
+      setForm((prev) => ({ ...prev, image: res.data.url }));
+      toast.success("Image uploaded! 📸");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Image upload failed");
+    } finally {
+      setUploading(false);
+      setUploadProgress(0);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setForm((prev) => ({ ...prev, image: "" }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.price || !form.quantity) {
       toast.error("Please fill all required fields"); return;
+    }
+    if (uploading) {
+      toast.error("Please wait for the image to finish uploading"); return;
     }
     setLoading(true);
     try {
@@ -94,6 +136,60 @@ const AddEditProduct = () => {
 
       <div className="card p-6">
         <form onSubmit={handleSubmit} className="space-y-5">
+
+          {/* Product Image */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              Product Photo
+            </label>
+            <div className="flex items-center gap-4">
+              <div className="relative w-28 h-28 rounded-xl overflow-hidden bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center flex-shrink-0">
+                {form.image ? (
+                  <>
+                    <img src={form.image} alt="Product" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={handleRemoveImage}
+                      className="absolute top-1 right-1 bg-black/60 hover:bg-black/80 text-white rounded-full p-1 transition-colors"
+                      title="Remove image"
+                    >
+                      <FaTimes className="text-xs" />
+                    </button>
+                  </>
+                ) : uploading ? (
+                  <div className="flex flex-col items-center gap-1 text-primary-600">
+                    <FaSpinner className="animate-spin text-xl" />
+                    <span className="text-xs font-medium">{uploadProgress}%</span>
+                  </div>
+                ) : (
+                  <FaCamera className="text-3xl text-gray-300" />
+                )}
+              </div>
+
+              <div className="flex-1">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageSelect}
+                  disabled={uploading}
+                  className="hidden"
+                  id="product-image-input"
+                />
+                <label
+                  htmlFor="product-image-input"
+                  className={`btn-secondary inline-flex items-center gap-2 cursor-pointer text-sm ${uploading ? "opacity-60 pointer-events-none" : ""}`}
+                >
+                  <FaCamera />
+                  {form.image ? "Change Photo" : "Upload Photo"}
+                </label>
+                <p className="text-xs text-gray-400 mt-1.5">
+                  JPG, PNG or WEBP. Max {MAX_IMAGE_MB}MB. If skipped, a generic photo will be shown.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Product Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -191,7 +287,7 @@ const AddEditProduct = () => {
             <button type="button" onClick={() => navigate(-1)} className="btn-secondary flex-1 py-3">
               {t("cancel")}
             </button>
-            <button type="submit" disabled={loading}
+            <button type="submit" disabled={loading || uploading}
               className="btn-primary flex-1 py-3 flex items-center justify-center gap-2 disabled:opacity-60">
               <FaSave />
               {loading ? "Saving..." : (isEdit ? t("save") : "List Product")}
