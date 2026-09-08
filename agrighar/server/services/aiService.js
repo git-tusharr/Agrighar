@@ -10,7 +10,7 @@
 ───────────────────────────────────────────────────────────── */
 
 const GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
-const MODEL = process.env.AI_MODEL || "gemini-2.5-flash";
+const MODEL = process.env.AI_MODEL || "gemini-3.6-flash";
 
 /* ── Low-level call to Gemini generateContent ──────────────────
    `contents` follows Gemini's { role, parts: [...] } shape.
