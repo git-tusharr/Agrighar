@@ -66,7 +66,7 @@ const Home = () => {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-sm font-medium px-4 py-1.5 rounded-full mb-6">
               <FaLeaf className="text-primary-200" />
-              BGI Hackathon 2026 — Team Green Coders
+              SMART INDIA HACKATHON 2026 - Team Specifiers
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
               {t("welcome")}

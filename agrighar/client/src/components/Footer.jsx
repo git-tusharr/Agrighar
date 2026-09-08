@@ -67,7 +67,7 @@ const Footer = () => (
       </div>
 
       <div className="border-t border-gray-800 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-500">
-        <p>© 2026 AGRIghar. Built with ❤️ by Team Green Coders — BGI Hackathon 2026</p>
+        <p>© 2026 AGRIghar. Built with ❤️ by Team Specifiers</p>
         <p>Theme: Agriculture, FoodTech & Rural Innovation</p>
       </div>
     </div>

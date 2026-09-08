@@ -1,7 +1,5 @@
 # AGRIghar Frontend
 
-Direct Farmer-to-Consumer Digital Marketplace Platform  
-**BGI Hackathon 2026 | Team Green Coders | Team ID: 2389**
 
 ---
 
