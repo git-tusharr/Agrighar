@@ -35,6 +35,7 @@ const resources = {
       deliveryAddress: "Delivery Address", paymentMethod: "Payment Method",
       cod: "Cash on Delivery", online: "Online Payment",
       yourLocation: "Your Location", distance: "Distance",
+      agriSahayak: "AGRI Sahayak AI", scanCrop: "Scan Crop", askAI: "Ask AI",
     }
   },
   hi: {
@@ -70,6 +71,7 @@ const resources = {
       deliveryAddress: "डिलीवरी पता", paymentMethod: "भुगतान विधि",
       cod: "कैश ऑन डिलीवरी", online: "ऑनलाइन भुगतान",
       yourLocation: "आपका स्थान", distance: "दूरी",
+      agriSahayak: "AGRI सहायक AI", scanCrop: "फसल स्कैन करें", askAI: "AI से पूछें",
     }
   },
   mr: {

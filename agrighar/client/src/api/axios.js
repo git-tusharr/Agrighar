@@ -88,4 +88,28 @@ export const getNearbyFarmers = (lat, lng) =>
 export const getFarmerById = (id) =>
   API.get(`/farmers/${id}`);
 
+// ── AGRI SAHAYAK AI ──────────────────────────────────────────
+export const analyzeCropImage = (file, onProgress) => {
+  const formData = new FormData();
+  formData.append("image", file);
+
+  return API.post("/ai/analyze-crop", formData, {
+    headers: {
+      "Content-Type": undefined,
+    },
+    onUploadProgress: (evt) => {
+      if (onProgress && evt.total) {
+        onProgress(Math.round((evt.loaded * 100) / evt.total));
+      }
+    },
+  });
+};
+
+export const sendAIChatMessage = (message, chatId, relatedAnalysisId) =>
+  API.post("/ai/chat", { message, chatId, relatedAnalysisId });
+
+export const getAIHistory = () => API.get("/ai/history");
+
+export const getAIAnalysisById = (id) => API.get(`/ai/analysis/${id}`);
+
 export default API;

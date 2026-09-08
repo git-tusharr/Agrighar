@@ -69,6 +69,18 @@ Server runs on http://localhost:5000
 | GET | /api/farmers/nearby?lat=&lng= | Nearby farmers |
 | GET | /api/farmers/:id | Farmer profile |
 
+### AGRI Sahayak AI
+Requires `GEMINI_API_KEY` in `.env` — see `.env.example`. Get a free key at [aistudio.google.com](https://aistudio.google.com).
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| POST | /api/ai/analyze-crop | Upload a crop/leaf image (`multipart/form-data`, field `image`) for an AI-based health assessment |
+| POST | /api/ai/chat | Chat with the agriculture assistant. Body: `{ message, chatId?, relatedAnalysisId? }` |
+| GET  | /api/ai/history | Current user's crop scans + chat conversations |
+| GET  | /api/ai/analysis/:id | A single crop scan owned by the current user |
+
+All AI routes require authentication (`Authorization: Bearer <token>`).
+
 ---
 
 ## Demo Credentials

@@ -66,7 +66,7 @@ const Home = () => {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-sm font-medium px-4 py-1.5 rounded-full mb-6">
               <FaLeaf className="text-primary-200" />
-              SMART INDIA HACKATHON 2026 — Team Specifiers
+              BGI Hackathon 2026 — Team Green Coders
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
               {t("welcome")}
@@ -102,6 +102,27 @@ const Home = () => {
               <div className="text-sm text-gray-500 font-medium">{stat.label}</div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* AGRI Sahayak AI promo */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="card bg-gradient-to-r from-primary-600 to-primary-700 text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-5 border-0">
+          <div className="text-center sm:text-left">
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-xs font-semibold px-3 py-1 rounded-full mb-3">
+              🌾 New — AI Powered
+            </div>
+            <h3 className="text-xl md:text-2xl font-bold mb-1">AGRI Sahayak AI</h3>
+            <p className="text-primary-100 text-sm md:text-base">
+              Scan a crop photo for an instant health check, or ask farming questions in English, Hindi, or Hinglish.
+            </p>
+          </div>
+          <Link
+            to="/agri-sahayak"
+            className="bg-white text-primary-700 hover:bg-primary-50 font-bold px-6 py-3 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center gap-2 whitespace-nowrap"
+          >
+            Try It Now <FaArrowRight />
+          </Link>
         </div>
       </section>
 

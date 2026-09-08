@@ -22,6 +22,9 @@ import AddEditProduct  from "./pages/AddEditProduct";
 import FarmerProfile   from "./pages/FarmerProfile";
 import Farmers         from "./pages/Farmers";
 import Profile         from "./pages/Profile";
+import AgricultureAI        from "./pages/AgricultureAI";
+import CropScanner          from "./pages/CropScanner";
+import AgricultureAssistant from "./pages/AgricultureAssistant";
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children, roles }) => {
@@ -67,6 +70,23 @@ const AppRoutes = () => (
     {/* Auth Routes */}
     <Route path="/login"    element={<AuthLayout><Login /></AuthLayout>} />
     <Route path="/register" element={<AuthLayout><Register /></AuthLayout>} />
+
+    {/* Protected - Any logged in user - AGRI Sahayak AI */}
+    <Route path="/agri-sahayak" element={
+      <ProtectedRoute>
+        <Layout><AgricultureAI /></Layout>
+      </ProtectedRoute>
+    } />
+    <Route path="/agri-sahayak/scan" element={
+      <ProtectedRoute>
+        <Layout><CropScanner /></Layout>
+      </ProtectedRoute>
+    } />
+    <Route path="/agri-sahayak/assistant" element={
+      <ProtectedRoute>
+        <Layout><AgricultureAssistant /></Layout>
+      </ProtectedRoute>
+    } />
 
     {/* Protected - Any logged in user */}
     <Route path="/profile" element={

@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import {
   FaLeaf, FaShoppingCart, FaBars, FaTimes,
-  FaUser, FaSignOutAlt, FaTachometerAlt, FaBoxOpen
+  FaUser, FaSignOutAlt, FaTachometerAlt, FaBoxOpen, FaRobot
 } from "react-icons/fa";
 import LanguageSwitcher from "./LanguageSwitcher";
 
@@ -60,6 +60,19 @@ const Navbar = () => {
             {navLink("/browse", t("browse"))}
             {user?.role === "farmer" && navLink("/farmer/dashboard", t("farmerDashboard"))}
             {user && navLink("/orders", t("orders"))}
+            {user && (
+              <Link
+                to="/agri-sahayak"
+                onClick={() => setMenuOpen(false)}
+                className={`flex items-center gap-1.5 font-medium transition-colors duration-150 ${
+                  isActive("/agri-sahayak")
+                    ? "text-primary-600"
+                    : "text-gray-600 hover:text-primary-600"
+                }`}
+              >
+                <FaRobot className="text-accent-500" /> {t("agriSahayak")}
+              </Link>
+            )}
             <LanguageSwitcher />
           </div>
 
@@ -134,6 +147,15 @@ const Navbar = () => {
           {navLink("/browse", t("browse"))}
           {user?.role === "farmer" && navLink("/farmer/dashboard", t("farmerDashboard"))}
           {user && navLink("/orders", t("orders"))}
+          {user && (
+            <Link
+              to="/agri-sahayak"
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center gap-2 text-gray-700 font-medium"
+            >
+              <FaRobot className="text-accent-500" /> {t("agriSahayak")}
+            </Link>
+          )}
           <div className="pt-2 border-t border-gray-100">
             <LanguageSwitcher />
           </div>
